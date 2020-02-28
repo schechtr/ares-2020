@@ -1,8 +1,10 @@
 # ARES-TELEMETRY-2020
 
 ## Todo List
-* sdCard.h
-* start and end bytes in rocket.h ROCKET_DATA struct
+* figure out solution for flash storage. the usual flashstorage runs on SAMD architecture but our microcontroller uses mbed.
+  this might be something: https://github.com/ubirch/ubirch-mbed-storage/tree/master/storage
+* gut the cli (perhaps)
+* start and end bytes in rocket.h ROCKET_DATA struct (framing stuff according to Jeff)
 * update baud rate in radio.h for hardware Serial1 based on what the radio is configured for
 * update bytes_per_refresh in radio.h based on how many bytes per second the radio is configured for
 
@@ -10,7 +12,7 @@
 ## About
 This project is an Arduino sketch designed for the Nano 33 BLE that takes telemetry data from:
 * pressure transducers
-* IMU - LSM9DS1
+* IMU (Accelerometer,Gyro,Magnetometer) - LSM9DS1
 * LPS (Barometer) - LPS22HB
 * HTS (Temperature) - HTS221
 
