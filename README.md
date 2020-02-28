@@ -1,4 +1,8 @@
 # ARES-TELEMETRY-2020
+
+## TODO List
+* start and end bytes in rocket.h ROCKET_DATA struct
+
 This project is an Arduino sketch designed for the Nano 33 BLE that takes telemetry data from:
 * pressure transducers
 * IMU - LSM9DS1
