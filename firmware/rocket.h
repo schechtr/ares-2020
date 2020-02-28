@@ -51,9 +51,9 @@ namespace Rocket {
 	static Hts::Handler Hts_INSTANCE;
     static Lps::Handler Lps_INSTANCE;
 	static Imu::Handler Imu_INSTANCE;
-    static Gps::Handler Gps_Instance;
-	static Radio::Handler Radio_Instance;
+    static Gps::Handler Gps_INSTANCE;
+	static Radio::Handler Radio_INSTANCE;
 	static SdCard::Handler SdCard_INSTANCE;
-	static RocketModule *handlers[] = {&Hts_INSTANCE, &Lps_INSTANCE, &Imu_INSTANCE, &Gps_Instance, 
+	static RocketModule *handlers[] = {&Hts_INSTANCE, &Lps_INSTANCE, &Imu_INSTANCE, &Gps_INSTANCE, 
                                        &Radio_INSTANCE, &SdCard_INSTANCE};
 }
