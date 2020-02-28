@@ -11,7 +11,7 @@
 ## About
 This project is an Arduino sketch designed for the Nano 33 BLE that takes telemetry data from:
 * pressure transducers
-* IMU - LSM9DS1
+* IMU (Accelerometer,Gyro,Magnetometer) - LSM9DS1
 * LPS (Barometer) - LPS22HB
 * HTS (Temperature) - HTS221
 
