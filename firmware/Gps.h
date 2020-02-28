@@ -27,12 +27,12 @@ namespace Gps{
         }
         virtual void refresh() {
             
-            if(!gps.available() || !gps.location.isUpdated()) {
+            if(!gps.location.isUpdated()) {
                 return;
             }
 
             lat = gps.location.lat();
             lng = gps.location.lng();   
         }
-    }
-}:
+    };
+}
