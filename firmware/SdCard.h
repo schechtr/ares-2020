@@ -4,12 +4,13 @@
 
 #define SD_CHIPSEL 9
 
+
 namespace SdCard {
     class Handler : public Rocket::RocketModule {
     private:
         int bytesWritten = 0;
         const char *fileName = "rocket_data.bin";
-        File saveFile;
+        SDLib::File saveFile;
 
     public:
         virtual bool warmup() {
@@ -17,7 +18,7 @@ namespace SdCard {
                 Serial.println("SD initialization failed");
                 return false;
             }
-            SerialUSB.print("Trying to create file: ");
+            Serial.print("Trying to create file: ");
             if (saveFile = SD.open("./output.txt", FILE_WRITE)) {
                 Serial.println("Created file");
                 return true;
@@ -25,7 +26,7 @@ namespace SdCard {
                 Serial.println("Could not create file.");
                 return false;
             }
-            SerialUSB.println("all good");
+            Serial.println("all good");
             return true;
         }
         virtual void refresh() {
@@ -50,6 +51,8 @@ namespace SdCard {
                 bytesWritten += Rocket::DATA_LEN;
             }
         }
-        virtual void shutdown() { saveFile.close(); }
-    };  // namespace SdCard
-};  // namespace SdCard
+        virtual void shutdown() { 
+            saveFile.close(); 
+        }
+    }; 
+}  // namespace SdCard
