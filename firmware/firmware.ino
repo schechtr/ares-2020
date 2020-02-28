@@ -7,17 +7,17 @@ extern void warmup();
 extern void refresh();
 
 void setup() {
-	SerialUSB.begin(115200);
+	Serial.begin(115200);
 	uint32_t serialAwaitStart = millis();
-	while(millis() - serialAwaitStart < 3000 && !SerialUSB);
-	SerialUSB.println("Congratulations on your code compiling");
+	while(millis() - serialAwaitStart < 3000 && !Serial);
+	Serial.println("Congratulations on your code compiling");
 	preWarmup();
 	warmup();
-	SerialUSB.println("Flushing remaining bytes");
+	Serial.println("Flushing remaining bytes");
 	uint32_t flushStart = millis();
-	while(millis() - flushStart < 2000 && SerialUSB.read() > 0);
+	while(millis() - flushStart < 2000 && Serial.read() > 0);
 	pinMode(LED_BUILTIN, OUTPUT);
-	SerialUSB.println("Setup function complete, beginning telemetry");
+	Serial.println("Setup function complete, beginning telemetry");
 }
 uint32_t totalRefresh = 0;
 bool highLoop = true;
