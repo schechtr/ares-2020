@@ -19,7 +19,7 @@ namespace SdCard {
                 return false;
             }
             Serial.print("Trying to create file: ");
-            if (saveFile = SD.open("./output.txt", FILE_WRITE)) {
+            if (saveFile = SD.open(fileName, FILE_WRITE)) {
                 Serial.println("Created file");
                 return true;
             } else {
@@ -39,7 +39,7 @@ namespace SdCard {
             if (bytesWritten + Rocket::DATA_LEN >= 512) {  // if 7 + 3 >= 8 (true)
                 //int startMillis = millis();
                 saveFile.close();  // flush
-                saveFile = SD.open("./output.txt", FILE_WRITE);
+                saveFile = SD.open(fileName, FILE_WRITE);
                 bytesWritten = remainder;
                 if (bytesWritten > 0) {  // true
                     k += saveFile.write(
