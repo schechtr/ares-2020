@@ -1,18 +1,20 @@
 #pragma once
 
 namespace Rocket {
-	constexpr char* NAME_CSV = "Analog_CC,Analog_fuel,Analog_OX,Analog_press,Bmp_altitude,Bmp_temperature,Bmp_pressure,Mpu_accelX,Mpu_accelY,Mpu_accelZ,Mpu_gyroX,Mpu_gyroY,Mpu_gyroZ,Mpu_magX,Mpu_magY,Mpu_magZ,timestamp";
-	constexpr char* TYPE_CSV = "uint16_t,uint16_t,uint16_t,uint16_t,float,float,float,float,float,float,float,float,float,float,float,float,uint32_t";
-	constexpr char* MODULE_CSV = "Analog,Bmp,Mpu,Radio,SdCard";
-	constexpr char* Analog_TEXT = "Analog";
-	constexpr char* Bmp_TEXT = "Bmp";
-	constexpr char* Mpu_TEXT = "Mpu";
+	constexpr char* NAME_CSV = "Hts_temperature,Lps_pressure,Imu_accelX,Imu_accelY,Imu_accelZ,Imu_gyroX,Imu_gyroY,Imu_gyroZ,Imu_magX,Imu_magY,Imu_magZ,Gps_lat,Gps_lng,timestamp";
+	constexpr char* TYPE_CSV = "float,float,float,float,float,float,float,float,float,float,float,float,float,uint32_t";
+	constexpr char* MODULE_CSV = "Hts,Lps,Imu,Gps,Radio,SdCard";
+	constexpr char* Hts_TEXT = "Hts";
+    constexpr char* Lps_TEXT = "Lps";
+	constexpr char* Imu_TEXT = "Imu";
+    constexpr char* Gps_TEXT = "Gps";
 	constexpr char* Radio_TEXT = "Radio";
 	constexpr char* SdCard_TEXT = "SdCard";
 	constexpr char* MODULE_NAMES[MODULE_NUM] = {
-		Analog_TEXT,
-		Bmp_TEXT,
-		Mpu_TEXT,
+		Hts_TEXT,
+        Lps_TEXT,
+        Imu_TEXT,
+		Gps_TEXT,
 		Radio_TEXT,
 		SdCard_TEXT
 	};
