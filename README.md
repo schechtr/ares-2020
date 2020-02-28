@@ -2,6 +2,7 @@
 
 ## Todo List
 * figure out solution for flash storage
+  this might be something https://github.com/ubirch/ubirch-mbed-storage/tree/master/storage
 * gut the cli (perhaps)
 * start and end bytes in rocket.h ROCKET_DATA struct (framing stuff according to Jeff)
 * update baud rate in radio.h for hardware Serial1 based on what the radio is configured for
