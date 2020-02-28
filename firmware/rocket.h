@@ -30,26 +30,30 @@ namespace Rocket {
 	const char *DATA_START = (char *)&data;
 	const int DATA_LEN = sizeof(ROCKET_DATA);
 
-	const int MODULE_NUM = 5;
-	const int Analog_ID = 0;
-	const int Bmp_ID = 1;
-	const int Mpu_ID = 2;
-	const int Radio_ID = 3;
-	const int SdCard_ID = 4;
+	const int MODULE_NUM = 6;
+	const int Hts_ID = 0;
+	const int Lps_ID = 1;
+	const int Imu_ID = 2;
+    const int Gps_ID = 3;
+	const int Radio_ID = 4;
+	const int SdCard_ID = 5;
 }
 
 #include "rocket_strings.h"
-#include "Analog.h"
-#include "Bmp.h"
-#include "Mpu.h"
+#include "Hts.h"
+#include "Lps.h"
+#include "Imu.h"
+#include "Gps.h"
 #include "Radio.h"
 #include "SdCard.h"
 
 namespace Rocket {
-	static Analog::Handler Analog_INSTANCE;
-	static Bmp::Handler Bmp_INSTANCE;
-	static Mpu::Handler Mpu_INSTANCE;
-	static Radio::Handler Radio_INSTANCE;
+	static Hts::Handler Hts_INSTANCE;
+    static Lps::Handler Lps_INSTANCE;
+	static Imu::Handler Imu_INSTANCE;
+    static Gps::Handler Gps_Instance;
+	static Radio::Handler Radio_Instance;
 	static SdCard::Handler SdCard_INSTANCE;
-	static RocketModule *handlers[] = {&Analog_INSTANCE, &Bmp_INSTANCE, &Mpu_INSTANCE, &Radio_INSTANCE, &SdCard_INSTANCE};
+	static RocketModule *handlers[] = {&Hts_INSTANCE, &Lps_INSTANCE, &Imu_INSTANCE, &Gps_Instance, 
+                                       &Radio_INSTANCE, &SdCard_INSTANCE};
 }
