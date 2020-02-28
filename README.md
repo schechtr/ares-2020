@@ -1,6 +1,6 @@
 # ARES-TELEMETRY-2020
 
-## TODO List
+## Todo List
 * start and end bytes in rocket.h ROCKET_DATA struct
 
 
