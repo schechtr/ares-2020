@@ -1,3 +1,4 @@
+// https://github.com/cmaglie/FlashStorage
 #include <FlashStorage.h>
 #include "launchCli.h"
 
@@ -16,36 +17,36 @@ uint32_t refreshTimes[Rocket::MODULE_NUM];
 extern uint32_t totalRefresh;
 
 void runCli() {
-    int readCommand = SerialUSB.read();
+    int readCommand = Serial.read();
     if(readCommand < 0) {
         return;
     }
-    //SerialUSB.println(readCommand);
+    //Serial.println(readCommand);
     byte identifier = 0;
     switch(readCommand) {
         case Rocket::META_FIELDS:
-            SerialUSB.println(Rocket::NAME_CSV);
+            Serial.println(Rocket::NAME_CSV);
             break;
         case Rocket::META_TYPES:
-            SerialUSB.println(Rocket::TYPE_CSV);
+            Serial.println(Rocket::TYPE_CSV);
             break;
         case Rocket::META_MODULES:
-            SerialUSB.println(Rocket::MODULE_CSV);
+            Serial.println(Rocket::MODULE_CSV);
             break;
         case Rocket::SET_MODULES_EN:
             identifier = awaitArg();
             if(identifier != enabledByte) {
                 enabledModules.write(identifier);
             }
-            SerialUSB.println(identifier, BIN);
+            Serial.println(identifier, BIN);
             enabledByte = identifier;
-            SerialUSB.println();
+            Serial.println();
             preWarmup();
             warmup();           
             break;
         case Rocket::GET_MODULES_EN:
-            SerialUSB.println(enabledByte, BIN);
-            SerialUSB.println();           
+            Serial.println(enabledByte, BIN);
+            Serial.println();           
             break;
         case Rocket::CALIBRATE:
             identifier = awaitArg();
@@ -59,17 +60,17 @@ void runCli() {
             break;
         case Rocket::BENCH:
             for(int i = 0; i < Rocket::MODULE_NUM - 1; i++) {
-                SerialUSB.print(refreshTimes[i]);
-                SerialUSB.print(',');
+                Serial.print(refreshTimes[i]);
+                Serial.print(',');
             }
             if(Rocket::MODULE_NUM > 0) {
-                SerialUSB.println(refreshTimes[Rocket::MODULE_NUM - 1]);
+                Serial.println(refreshTimes[Rocket::MODULE_NUM - 1]);
             }
-            SerialUSB.println(totalRefresh);
+            Serial.println(totalRefresh);
             break;
         case Rocket::PING:
-            SerialUSB.print("pong: ");
-            SerialUSB.println(millis());
+            Serial.print("pong: ");
+            Serial.println(millis());
             break;
         case Rocket::SHUTDOWN:
             shutdown();
@@ -79,8 +80,8 @@ void runCli() {
 }
 //holds until a byte comes through
 byte awaitArg() {
-    while(SerialUSB.available() == 0);
-    return (byte) SerialUSB.read();
+    while(Serial.available() == 0);
+    return (byte) Serial.read();
 }
 inline bool byteFlag(byte b, int idx) {
     return b & (1 << (7 - idx));
@@ -93,36 +94,36 @@ void preWarmup() {
         if(!byteFlag(enabledByte, i)) {
             continue;
         }
-        SerialUSB.print("Pre-warming module: ");
-        SerialUSB.println(Rocket::MODULE_NAMES[i]);
+        Serial.print("Pre-warming module: ");
+        Serial.println(Rocket::MODULE_NAMES[i]);
         Rocket::handlers[i]->preWarmup();
     }
-    SerialUSB.println("Pre-warmup complete");
+    Serial.println("Pre-warmup complete");
 }
 void warmup() {
     for(int i = 0; i < Rocket::MODULE_NUM ; i++) {
         if(!byteFlag(enabledByte, i)) {
             continue;
         }
-        SerialUSB.print("Warming up: ");
-        SerialUSB.println(Rocket::MODULE_NAMES[i]);
+        Serial.print("Warming up: ");
+        Serial.println(Rocket::MODULE_NAMES[i]);
         if(Rocket::handlers[i]->warmup()) {
-            SerialUSB.println(" ...successful");
+            Serial.println(" ...successful");
         }
         else {
-            SerialUSB.println(" ...unsuccessful, disabling");
+            Serial.println(" ...unsuccessful, disabling");
             enabledByte &= ~(1 << (7 - i));
         }
     }
-    SerialUSB.println("Warmup complete");
+    Serial.println("Warmup complete");
 }
 void refresh() {
     for(int i = 0; i < Rocket::MODULE_NUM; i++) {
         if(!byteFlag(enabledByte, i)) {
             continue;
         }
-        //SerialUSB.print("Refreshing: ");
-        //SerialUSB.println(Rocket::MODULE_NAMES[i]);
+        //Serial.print("Refreshing: ");
+        //Serial.println(Rocket::MODULE_NAMES[i]);
         uint32_t startTime = millis();
         Rocket::handlers[i]->refresh();
         refreshTimes[i] = millis() - startTime;
@@ -136,8 +137,8 @@ void calibrate(byte arg) {
             continue;
         }
         if(arg == 8 || i == arg) {
-            SerialUSB.print(F("Calibrating: "));
-            SerialUSB.println(Rocket::MODULE_NAMES[i]);
+            Serial.print(F("Calibrating: "));
+            Serial.println(Rocket::MODULE_NAMES[i]);
             Rocket::handlers[i]->calibrate();
         }
     }
@@ -147,9 +148,9 @@ void shutdown() {
         if(!byteFlag(enabledByte, i)) {
             continue;
         }
-        SerialUSB.print(F("Shutting down: "));
-        SerialUSB.println(Rocket::MODULE_NAMES[i]);
+        Serial.print(F("Shutting down: "));
+        Serial.println(Rocket::MODULE_NAMES[i]);
         Rocket::handlers[i]->shutdown();
     }
-    SerialUSB.println(F("Shut down. Goodbye!"));
+    Serial.println(F("Shut down. Goodbye!"));
 }
