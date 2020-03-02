@@ -1,10 +1,18 @@
 #include "RocketModule.h"
 #include "rocket.h"
+
 bool isOn = true;
 
-extern void preWarmup();
-extern void warmup();
-extern void refresh();
+void preWarmup();
+void warmup();
+void refresh();
+void shutdown();
+
+uint8_t enabledByte = 0xff;
+
+bool byteFlag(byte b, int idx) {
+    return b & (1 << (7 - idx));
+}
 
 void setup() {
 	Serial.begin(115200);
@@ -29,13 +37,60 @@ void loop() {
 		else {
 			digitalWrite(LED_BUILTIN, LOW);
 		}
-		uint32_t startTime = millis();
 		refresh();
-		totalRefresh = millis() - startTime;
 		highLoop = !highLoop;
 	}
 	else {
 		digitalWrite(LED_BUILTIN, LOW);
 	}
-	runCli();
+}
+
+
+void preWarmup() {
+    for(int i = 0; i < Rocket::MODULE_NUM; i++) {
+       
+        Serial.print("Pre-warming module: ");
+        //Serial.println(Rocket::MODULE_NAMES[i]);
+        Rocket::handlers[i]->preWarmup();
+    }
+    Serial.println("Pre-warmup complete");
+}
+void warmup() {
+    for(int i = 0; i < Rocket::MODULE_NUM ; i++) {
+       
+        Serial.print("Warming up: ");
+        //Serial.println(Rocket::MODULE_NAMES[i]);
+        if(Rocket::handlers[i]->warmup()) {
+            Serial.println(" ...successful");
+            
+        }
+        else {
+            Serial.println(" ...unsuccessful, disabling");
+            enabledByte &= ~(1 << (7 - i));
+        }
+    }
+    Serial.println("Warmup complete");
+}
+void refresh() {
+    for(int i = 0; i < Rocket::MODULE_NUM; i++) {
+        if(!byteFlag(enabledByte, i)) {
+            continue;
+        }
+        //Serial.print("Refreshing: ");
+        //Serial.println(Rocket::MODULE_NAMES[i]);
+        Rocket::handlers[i]->refresh();
+        
+    }
+}
+
+void shutdown() {
+    for(int i = 0; i < Rocket::MODULE_NUM; i++) {
+        if(!byteFlag(enabledByte, i)) {
+            continue;
+        }
+        Serial.print(F("Shutting down: "));
+        //Serial.println(Rocket::MODULE_NAMES[i]);
+        Rocket::handlers[i]->shutdown();
+    }
+    Serial.println(F("Shut down. Goodbye!"));
 }
