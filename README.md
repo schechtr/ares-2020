@@ -1,7 +1,7 @@
 # ARES-TELEMETRY-2020
 
 ## Todo List
-* SD.h has conflicting constants with some mbed stuff that need to be sorted out
+* SD.h has conflicting constants with some mbed stuff that need to be sorted out **fixed by installing fresh SD lib from arduino**
 * figure out solution for flash storage. the usual flashstorage runs on SAMD architecture but our microcontroller uses mbed.
 * gut the cli (perhaps)
 * start and end bytes in rocket.h ROCKET_DATA struct (framing stuff according to Jeff)
