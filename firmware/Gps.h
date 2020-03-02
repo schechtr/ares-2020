@@ -18,12 +18,9 @@ namespace Gps{
         TinyGPSPlus gps;
 
         virtual bool warmup() {
-            bool setupRight = gpsSerial.begin(GPS_BAUD);
-            if(!setupRight) {
-                return false;
-            }
-
-            return setupRight;
+            gpsSerial.begin(GPS_BAUD);
+           
+            return true;
         }
         virtual void refresh() {
             
