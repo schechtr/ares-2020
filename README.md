@@ -1,9 +1,6 @@
 # ARES-TELEMETRY-2020
 
 ## Todo List
-* figure out solution for flash storage. the usual flashstorage runs on SAMD architecture but our microcontroller uses mbed.
-  this might be something: https://github.com/ubirch/ubirch-mbed-storage/tree/master/storage
-* gut the cli (perhaps)
 * start and end bytes in rocket.h ROCKET_DATA struct (framing stuff according to Jeff)
 * update baud rate in radio.h for hardware Serial1 based on what the radio is configured for
 * update bytes_per_refresh in radio.h based on how many bytes per second the radio is configured for
