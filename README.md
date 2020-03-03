@@ -2,11 +2,15 @@
 
 ## Todo List
 * SD.h has conflicting constants with some mbed stuff that need to be sorted out - update: **fixed by installing fresh SD lib from arduino**
-* figure out solution for flash storage. the usual flashstorage runs on SAMD architecture but our microcontroller uses mbed.
 * gut the cli (perhaps)
-* start and end bytes in rocket.h ROCKET_DATA struct (framing stuff according to Jeff)
+* confirm that start and end bytes in rocket.h ROCKET_DATA struct (framing stuff according to Jeff) are good
 * update baud rate in radio.h for hardware Serial1 based on what the radio is configured for
 * update bytes_per_refresh in radio.h based on how many bytes per second the radio is configured for
+* timeout for warmups perhaps?
+* make timestamp
+
+## Additional Info
+* data is little endian
 
 
 ## About
