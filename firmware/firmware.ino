@@ -10,7 +10,7 @@ void shutdown();
 
 uint8_t enabledByte = 0xff;
 
-bool byteFlag(byte b, int idx) {
+bool byteFlag(uint8_t b, int idx) {
     return b & (1 << (7 - idx));
 }
 
@@ -27,6 +27,8 @@ void setup() {
 	pinMode(LED_BUILTIN, OUTPUT);
 	Serial.println("Setup function complete, beginning telemetry");
 }
+
+
 uint32_t totalRefresh = 0;
 bool highLoop = true;
 void loop() {
@@ -46,6 +48,7 @@ void loop() {
 }
 
 
+/* generic implementations */
 void preWarmup() {
     for(int i = 0; i < Rocket::MODULE_NUM; i++) {
        
@@ -55,6 +58,7 @@ void preWarmup() {
     }
     Serial.println("Pre-warmup complete");
 }
+
 void warmup() {
     for(int i = 0; i < Rocket::MODULE_NUM ; i++) {
        
@@ -71,6 +75,7 @@ void warmup() {
     }
     Serial.println("Warmup complete");
 }
+
 void refresh() {
     for(int i = 0; i < Rocket::MODULE_NUM; i++) {
         if(!byteFlag(enabledByte, i)) {
@@ -80,6 +85,7 @@ void refresh() {
         //Serial.println(Rocket::MODULE_NAMES[i]);
         Rocket::handlers[i]->refresh();
         
+        Rocket::data.timestamp = millis(); //update timestamp
     }
 }
 
