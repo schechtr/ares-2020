@@ -5,8 +5,8 @@
 namespace Rocket {
 	#pragma pack(push, 1)
 	struct ROCKET_DATA {
-		byte start1 = 0xff;
-		byte start2 = 0xff;
+		uint8_t start1 = 0xff;
+		uint8_t start2 = 0xff;
 		float Hts_temperature;
 		float Lps_pressure;
 		float Imu_accelX;
@@ -21,8 +21,8 @@ namespace Rocket {
         float Gps_lat;
         float Gps_lng;
 		uint32_t timestamp;
-		byte end1 = 0xA4;
-		byte end2 = 0x55;
+		uint8_t end1 = 0xA4;
+		uint8_t end2 = 0x55;
 	};
 	#pragma pack(pop)
 	static ROCKET_DATA data;
