@@ -5,8 +5,9 @@
 * confirm that start and end bytes in rocket.h ROCKET_DATA struct are good enough
 * update bytes_per_refresh in radio.h based on how many bytes per second the radio is configured for
 * timeout for warmups perhaps?
-* make timestamp
-* scheduling
+* timestamps
+* convert pressures to altitude
+* refresh scheduling
 
 ## Additional Info
 * data is little endian
