@@ -8,6 +8,7 @@
 * timestamps
 * convert pressures to altitude
 * refresh scheduling
+* something to parse serial input on the receiver side
 
 ## Additional Info
 * data is little endian
