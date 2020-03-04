@@ -1,13 +1,14 @@
 # ARES-TELEMETRY-2020
 
 ## Todo List
-* SD.h has conflicting constants with some mbed stuff that need to be sorted out - update: **fixed by installing fresh SD lib from arduino**
-* gut the cli (perhaps)
-* confirm that start and end bytes in rocket.h ROCKET_DATA struct (framing stuff according to Jeff) are good
-* update baud rate in radio.h for hardware Serial1 based on what the radio is configured for
+* test SD **currently the code is essentially unchanged from last year**
+* confirm that start and end bytes in rocket.h ROCKET_DATA struct are good enough
 * update bytes_per_refresh in radio.h based on how many bytes per second the radio is configured for
 * timeout for warmups perhaps?
-* make timestamp
+* timestamps
+* convert pressures to altitude
+* refresh scheduling
+* something to parse serial input on the receiver side
 
 ## Additional Info
 * data is little endian
