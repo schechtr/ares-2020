@@ -24,7 +24,7 @@ namespace Gps{
         }
         virtual void refresh() {
             long start = millis();
-            while(gpsSerial.available() > 0 && millis() - start < 250) {
+            while(gpsSerial.available() > 0 && millis() - start < 25) {
                 if(gps.encode(gpsSerial.read())) {
                     if(gps.location.isValid()) {
                         lat = gps.location.lat();
