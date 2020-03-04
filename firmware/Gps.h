@@ -2,8 +2,8 @@
 #include "RocketModule.h"
 #include <TinyGPS++.h>
 
-#define RX_GPS 9
-#define TX_GPS 10
+#define RX_GPS 10
+#define TX_GPS 9
 #define GPS_BAUD 9600
 
 namespace Gps{
@@ -23,13 +23,16 @@ namespace Gps{
             return true;
         }
         virtual void refresh() {
-            
-            if(!gps.location.isUpdated()) {
-                return;
+            long start = millis();
+            while(gpsSerial.available() > 0 && millis() - start < 250) {
+                if(gps.encode(gpsSerial.read())) {
+                    if(gps.location.isValid()) {
+                        lat = gps.location.lat();
+                        lng = gps.location.lng();
+                    }
+                }
             }
-
-            lat = gps.location.lat();
-            lng = gps.location.lng();   
+            
         }
     };
 }
