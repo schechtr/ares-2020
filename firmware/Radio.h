@@ -1,17 +1,20 @@
 #pragma once
 #include "RocketModule.h"
+
+#define RADIO_BAUD 57600
+
 namespace Radio {
     //configured for the razor imu
     class Handler: public Rocket::RocketModule {
     public:
-        const int BYTES_PER_REFRESH = 24;
+        const int BYTES_PER_REFRESH = 30;
         bool needsRefresh = true;
         Rocket::ROCKET_DATA cache;
         int currentWrite = 0;
         char *cachePtr;
         virtual bool warmup() {
             //it's all RX TX, we can only hope
-            Serial1.begin(9600);
+            Serial1.begin(RADIO_BAUD);
             cachePtr = (char *)&cache;
             return true;
         }
