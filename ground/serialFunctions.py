@@ -78,10 +78,10 @@ class SerialParser:
         
     
     def findPackage(self, stream):
-        # =======
-        # reads the serial data and picks out packages
-        # feeds into unpackData
-        # =======
+        '''
+        reads the serial data and picks out packages
+        feeds into unpackData
+        '''
 
         packages = stream.hex().split('ffff')
         
@@ -94,11 +94,11 @@ class SerialParser:
 
 
     def unpackData(self, package):
-        # ========
-        # takes in package (wihthout start and end bytes)
-        # returns unpacked data as a tuple
-        # format <fffffffffffffI
-        # ========
+        '''
+        takes in package (wihthout start and end bytes)
+        returns unpacked data as a tuple
+        format <fffffffffffffI
+        '''
 
         unpacked = struct.unpack("<2sfffffffffffffI2s", package)
 
@@ -106,9 +106,9 @@ class SerialParser:
 
 
     def updateData(self, update):
-        # =======
-        # updates RocketData after newly unpacked data is available
-        # =======
+        '''
+        updates RocketData after newly unpacked data is available
+        '''
 
         data = RocketData(*update)
         self.data = data
