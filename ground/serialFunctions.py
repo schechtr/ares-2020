@@ -40,7 +40,7 @@ _real = '\xff\xfff\x90\xe1AjJ\xc9B\x00@\x0e>\x00\x00\x06\xbd\x00\x80z?\x00\x80;\
 # a fake but easy to test with one:
 _package =  b'\x31\x99\xc3\x41\xca\x15\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x00\x08\x7d\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x7a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x18\xe3\xec\xc2\x00\x00\x00\x00'
 
-_raw =  b'\xff\xff\x31\x99\xc3\x41\xca\x15\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x00\x08\x7d\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x7a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x18\xe3\xec\xc2\x00\x00\x00\x00\xa4\x55'\
+_raw =  b'\x12\x00\xa1\x7e\xff\xff\x31\x99\xc3\x41\xca\x15\xff\xff\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x00\x08\x7d\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x7a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x18\xe3\xec\xc2\x00\x00\x00\x00\xa4\x55'\
         b'\xff\xff\x31\x98\xc2\x41\xca\x15\xc8\x42\x00\x00\x03\x3e\x00\x00\x84\xbd\x00\x08\x75\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x9a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x23\xe3\xec\xc2\x00\x00\x00\x00\xa4\x55'
 
 def press2Alt(pressure, temp):
@@ -120,7 +120,11 @@ class SerialParser:
         for package in packages: 
             if package:
                 package = 'ffff' + package
-            
+
+                print(len(package))
+                if len(package) != 120:
+                    continue
+
                 unpacked = self.unpackData(bytes.fromhex(package))
                 self.updateData(unpacked)
 
@@ -153,35 +157,51 @@ class SerialParser:
 
 
 
-
-'''
-
-receive = serial.Serial()
-
-receive.baudrate = 57600
-receive.port = '/dev/tty.usbserial-AI02MK71'
-receive.open()
-
-package = receive.read(60)
-print(package)
-
-
-
-receive.close()
-
-'''
-# data = RocketData()
-# parser = SerialParser(data)
-
 '''
  if the serial stream was running here then data would come in and be parsed like this.
  idk if it will work exactly like this irl but we can see. definitely need some error checking
  with the start and end bytes and size of packages.
  '''
-# parser.findPackage(_raw)
 
-# print(parser.data_queue)
+
+def main():
+
+    
+    # select the port
+    ## serial_ports()
+    port = '/dev/tty.usbserial-AI02MK71'
+
+    receive = serial.Serial()
+    receive.baudrate = 57600
+    receive.port = port
+    receive.open()
+    
+    # class instances
+    data = RocketData()
+    parser = SerialParser(data)
+
+
+    #print(len(parser.data_queue))
+    #print(parser.data_queue)
+
+    # poll the serial port
+        # send stream to parser
+            # parser.findPackage(_raw)
+
+    while True:
+        stream = receive.read(60)
+        parser.findPackage(stream)
+
+        if len(parser.data_queue) > 3:
+            break
+
+    print(parser.data_queue)
+
+    
+    #receive.close()
+
+    
 
 if __name__ == "__main__":
-    pass
+    main()
 
