@@ -31,15 +31,18 @@ Timestamp
 =========================
 '''
 
-# very shitty (wrong) sample data package:
-#b'\xff\xfff\x90\xe1AjJ\xc9B\x00@\x0e>\x00\x00\x06\xbd\x00\x80z?\x00\x80;\xbe\x00\xa0\x0c?\x00\x00z=\x00@N@\x00T\xd3A\x80\xd0\x06B\x00\x00\x00\x00\x00\x00\x00\x00\x87u\x14\x00\xa4U'
+# real data package:
+_real = '\xff\xfff\x90\xe1AjJ\xc9B\x00@\x0e>\x00\x00\x06\xbd\x00\x80z?\x00\x80;\xbe\x00\xa0\x0c?\x00\x00z=\x00@N@\x00T\xd3A\x80\xd0\x06B\x00\x00\x00\x00\x00\x00\x00\x00\x87u\x14\x00\xa4U'
 
-# "fake" and nice one:
-raw =  b'\x31\x99\xc3\x41\xca\x15\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x00\x08\x7d\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x7a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x18\xe3\xec\xc2\x00\x00\x00\x00'
+# a fake but easy to test with one:
+_package =  b'\x31\x99\xc3\x41\xca\x15\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x00\x08\x7d\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x7a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x18\xe3\xec\xc2\x00\x00\x00\x00'
 
+_raw =  b'\xff\xff\x31\x99\xc3\x41\xca\x15\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x00\x08\x7d\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x7a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x18\xe3\xec\xc2\x00\x00\x00\x00\xa4\x55'\
+        b'\xff\xff\x31\x98\xc2\x41\xca\x15\xc8\x42\x00\x00\x03\x3e\x00\x00\x84\xbd\x00\x08\x75\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x9a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x23\xe3\xec\xc2\x00\x00\x00\x00\xa4\x55'
 
 @dataclass
 class RocketData:
+    start : bytes = ''
     Hts_temperature : float = 0
     Lps_pressure : float = 0
     Imu_accelX : float = 0
@@ -54,26 +57,56 @@ class RocketData:
     Gps_lat : float = 0
     Gps_lng : float = 0
     timestamp : int = 0
+    end : bytes = ''
 
 
-def unpackData(package):
-    # ========
-    # takes in package (wihthout start and end bytes)
-    # returns unpacked data
-    # format <fffffffffffffI
-    # ========
+class SerialParser:
 
-    unpacked = struct.unpack("<fffffffffffffI", package)
+    def __init__(self, data):
+        self.data = data
+        self.data_queue = []
+        
+    
+    def findPackage(self, stream):
+        # =======
+        # reads the serial data and picks out packages
+        # feeds into unpackData
+        # =======
 
-    return unpacked
+        packages = stream.hex().split('ffff')
+        
+        for package in packages: 
+            if package:
+                package = 'ffff' + package
+            
+                unpacked = self.unpackData(bytes.fromhex(package))
+                self.updateData(unpacked)
 
-def findPackage(serialPort):
-    # =======
-    # reads the serial port and picks out packages
-    # feeds into unpackData
-    # =======
 
-    pass
+    def unpackData(self, package):
+        # ========
+        # takes in package (wihthout start and end bytes)
+        # returns unpacked data as a tuple
+        # format <fffffffffffffI
+        # ========
+
+        unpacked = struct.unpack("<2sfffffffffffffI2s", package)
+
+        return unpacked
+
+
+    def updateData(self, update):
+        # =======
+        # updates RocketData after newly unpacked data is available
+        # =======
+
+        data = RocketData(*update)
+        self.data = data
+
+        # thought a queue could be helpful maybe, at least for debugging it is
+        self.data_queue.append(data)
+        if len(self.data_queue) > 10:
+            self.data_queue.pop(0)
 
 
 '''
@@ -92,15 +125,15 @@ print(package)
 receive.close()
 
 '''
-
 data = RocketData()
-unpacked = unpackData(raw)
+parser = SerialParser(data)
 
-# https://stackoverflow.com/questions/1993727/expanding-tuples-into-arguments
-# this is so epic holy shit python
+'''
+ if the serial stream was running here then data would come in and be parsed like this.
+ idk if it will work exactly like this irl but we can see. definitely need some error checking
+ with the start and end bytes and size of packages.
+'''
+parser.findPackage(_raw)
 
-# how to update the class?
-_data = RocketData(*unpacked)
-data = _data
+print(parser.data_queue)
 
-print(data)
