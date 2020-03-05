@@ -1,14 +1,12 @@
 # ARES-TELEMETRY-2020
 
-## Todo List
+## Firmware Todo List
 * test SD **currently the code is essentially unchanged from last year**
 * confirm that start and end bytes in rocket.h ROCKET_DATA struct are good enough
 * update bytes_per_refresh in radio.h based on how many bytes per second the radio is configured for
 * timeout for warmups perhaps?
-* timestamps
-* convert pressures to altitude
+* ~~convert pressures to altitude~~ **moved to ground station**
 * refresh scheduling
-* something to parse serial input on the receiver side
 
 ## Additional Info
 * data is little endian
