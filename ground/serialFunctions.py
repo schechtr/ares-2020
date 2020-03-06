@@ -43,14 +43,8 @@ _package =  b'\x31\x99\xc3\x41\xca\x15\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x
 _raw =  b'\x12\x00\xa1\x7e\xff\xff\x31\x99\xc3\x41\xca\x15\xff\xff\xc8\x42\x00\x00\x03\x3d\x00\x00\x84\xbd\x00\x08\x7d\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x7a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x18\xe3\xec\xc2\x00\x00\x00\x00\xa4\x55'\
         b'\xff\xff\x31\x98\xc2\x41\xca\x15\xc8\x42\x00\x00\x03\x3e\x00\x00\x84\xbd\x00\x08\x75\x3f\x00\x40\x9c\x3e\x00\xe8\x00\x40\x00\x00\x9a\x3e\x00\x86\x3a\x41\x80\x88\x12\x42\x00\x1f\x95\xc1\xd0\x46\x08\x42\x23\xe3\xec\xc2\x00\x00\x00\x00\xa4\x55'
 
-def press2Alt(pressure, temp):
-    '''
-    temperature: Celsius
-    pressure: hPa
-    returns height in meters
-    '''
-    seaLevel = 1013.25
-    return (pow(seaLevel/pressure, 1/5.257) - 1) * (temp + 273.15) * 1/(0.0065)
+STRUCT_LENGTH = 60
+
 
 def serial_ports():
     """ Lists serial port names
@@ -82,7 +76,7 @@ def serial_ports():
 
 @dataclass
 class RocketData:
-    start : bytes = ''
+    start : bytes = b'\xff\xff'
     Hts_temperature : float = 0 #celsius
     Lps_pressure : float = 0 # kiloPascals
     Imu_accelX : float = 0
@@ -97,10 +91,9 @@ class RocketData:
     Gps_lat : float = 0
     Gps_lng : float = 0
     timestamp : int = 0
-    end : bytes = ''
+    end : bytes = b'\xA4\x55'
 
-
-
+        
 
 class SerialParser:
 
@@ -125,6 +118,7 @@ class SerialParser:
                 self.numpackages += 1
 
                 package = 'ffff' + package
+                
 
                 if len(package) != 120:
                     self.loss += 1
