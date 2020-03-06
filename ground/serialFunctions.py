@@ -107,6 +107,8 @@ class SerialParser:
     def __init__(self, data):
         self.data = data
         self.data_queue = []
+        self.numpackages = 0
+        self.loss = 0
         
     
     def findPackage(self, stream):
@@ -119,10 +121,13 @@ class SerialParser:
         
         for package in packages: 
             if package:
+
+                self.numpackages += 1
+
                 package = 'ffff' + package
 
-                print(len(package))
                 if len(package) != 120:
+                    self.loss += 1
                     continue
 
                 unpacked = self.unpackData(bytes.fromhex(package))
@@ -151,7 +156,7 @@ class SerialParser:
 
         # thought a queue could be helpful maybe, at least for debugging it is
         self.data_queue.append(data)
-        if len(self.data_queue) > 10:
+        if len(self.data_queue) > 50:
             self.data_queue.pop(0)
 
 
@@ -168,8 +173,9 @@ def main():
 
     
     # select the port
-    ## serial_ports()
-    port = '/dev/tty.usbserial-AI02MK71'
+    print(serial_ports())
+    #port = '/dev/tty.usbserial-AI02MK71'
+    port = '/dev/ttyS10'
 
     receive = serial.Serial()
     receive.baudrate = 57600
@@ -189,13 +195,21 @@ def main():
             # parser.findPackage(_raw)
 
     while True:
-        stream = receive.read(60)
+        stream = receive.read(2400)
+        #print(stream.hex())
+
+        
         parser.findPackage(stream)
 
-        if len(parser.data_queue) > 3:
+        if len(parser.data_queue) > 25:
             break
 
+        
+    print("report:")
     print(parser.data_queue)
+    print("total packages received: {}".format(parser.numpackages))
+    print("total packages lost: {}".format(parser.loss))
+    print("percent lost: {}".format(100.0 * parser.loss / parser.numpackages))
 
     
     #receive.close()
