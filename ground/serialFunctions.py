@@ -138,10 +138,14 @@ def main():
 
     
     # select the port
-    print(serial_ports())
+    test = serial_ports()
+    print(test)
     #port = '/dev/tty.usbserial-AI02MK71'
-    port = '/dev/ttyS10'
 
+    indexNum = int(input("Select index:"))
+    port = test[indexNum]
+    
+    
     receive = serial.Serial()
     receive.baudrate = 57600
     receive.port = port
