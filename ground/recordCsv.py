@@ -1,6 +1,6 @@
 import csv
 from serialFunctions import RocketData
-import datetime
+from datetime import datetime
 
 
 def press2Alt(pressure, temp):
@@ -33,7 +33,6 @@ def convertPackage(packet : RocketData):
         Gps_lng : float = 0
         UNIX time : string %H:%M:%S
         altitude: float in meters
-        Unix 
     ]
     '''
     results = list()
@@ -46,7 +45,10 @@ def convertPackage(packet : RocketData):
     alt = float("{0:.2f}".format(alt))
     results.append(alt)
 
-    localtime = 
+    localtime = str(datetime.now())[11:]
+    results.append(localtime)
+    
+
     return results
 
     

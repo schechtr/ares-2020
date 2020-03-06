@@ -2,8 +2,7 @@ import serial
 import struct
 from dataclasses import dataclass
 from math import pow 
-import sys
-import glob
+from portSelect import serial_ports
 
 '''
 =====================
@@ -45,34 +44,6 @@ _raw =  b'\x12\x00\xa1\x7e\xff\xff\x31\x99\xc3\x41\xca\x15\xff\xff\xc8\x42\x00\x
 
 STRUCT_LENGTH = 60
 
-
-def serial_ports():
-    """ Lists serial port names
-
-        :raises EnvironmentError:
-            On unsupported or unknown platforms
-        :returns:
-            A list of the serial ports available on the system
-    """
-    if sys.platform.startswith('win'):
-        ports = ['COM%s' % (i + 1) for i in range(256)]
-    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-        # this excludes your current terminal "/dev/tty"
-        ports = glob.glob('/dev/tty[A-Za-z]*')
-    elif sys.platform.startswith('darwin'):
-        ports = glob.glob('/dev/tty.*')
-    else:
-        raise EnvironmentError('Unsupported platform')
-
-    result = []
-    for port in ports:
-        try:
-            s = serial.Serial(port)
-            s.close()
-            result.append(port)
-        except (OSError, serial.SerialException):
-            pass
-    return result
 
 @dataclass
 class RocketData:
