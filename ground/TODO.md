@@ -16,6 +16,11 @@
    * log a timestamp in localtime (not the millis we are receiving)
    * output data to csv or other easily readable format for prop's pleasure
 
+* package CSV values in recordCSV.py
+
+* get localtime
+* get
+
 ### Dependencies
 
 * PySerial
