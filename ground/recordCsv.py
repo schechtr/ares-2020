@@ -40,16 +40,13 @@ def convertPackage(packet : RocketData):
     for i in packet.__dict__.items():
         if i[0] == 'start' or i[0] == 'end':
             continue
-        if i[0] == 'timestamp':
-            millis = i[1]
-            temp = datetime.datetime.fromtimestamp(millis/1000).strftime('%H:%M:%S.%f')
-            results.append(temp)
-            continue
         results.append(i[1])
     
     alt = press2Alt(results[1], results[0])
     alt = float("{0:.2f}".format(alt))
     results.append(alt)
+
+    localtime = 
     return results
 
     
