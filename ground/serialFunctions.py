@@ -3,6 +3,7 @@ import struct
 from dataclasses import dataclass
 from math import pow 
 from portSelect import serial_ports
+import recordCsv
 
 '''
 =====================
@@ -136,20 +137,16 @@ class SerialParser:
 
 def main():
 
-    
+    print('Scanning ports...')    
     # select the port
-    test = serial_ports()
-    print(test)
-    #port = '/dev/tty.usbserial-AI02MK71'
+    ports = serial_ports()
+    print(ports)
 
-    indexNum = int(input("Select index:"))
-    port = test[indexNum]
+    indexNum = int(input("Select index: "))
+    port = ports[indexNum]
     
-    
-    receive = serial.Serial()
-    receive.baudrate = 57600
-    receive.port = port
-    receive.open()
+    receive = serial.Serial(port, baudrate=57600, timeout=5)
+    print("Connection successful, listening on", port)
     
     # class instances
     data = RocketData()
@@ -175,7 +172,7 @@ def main():
 
         
     print("report:")
-    print(parser.data_queue)
+   # print(parser.data_queue)
     print("total packages received: {}".format(parser.numpackages))
     print("total packages lost: {}".format(parser.loss))
     print("percent lost: {}".format(100.0 * parser.loss / parser.numpackages))
