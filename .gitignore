@@ -4,3 +4,4 @@ verbose/
 !.vscode/arduino.json
 config.csv
 rocket_data.csv
+__pycache__/*
