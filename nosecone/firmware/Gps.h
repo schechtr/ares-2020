@@ -9,6 +9,7 @@
 namespace Gps{
     float &lat = Rocket::data.Gps_lat;
     float &lng = Rocket::data.Gps_lng;
+    float &altitude = Rocket::data.Gps_altitude;
     
     UART gpsSerial(digitalPinToPinName(RX_GPS), digitalPinToPinName(TX_GPS), NC, NC);
 
@@ -29,6 +30,9 @@ namespace Gps{
                     if(gps.location.isValid()) {
                         lat = gps.location.lat();
                         lng = gps.location.lng();
+                    }
+                    if(gps.altitude.isValid()) {
+                        altitude = gps.altitude.feet();
                     }
                 }
             }

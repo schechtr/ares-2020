@@ -7,6 +7,7 @@ namespace Rocket {
 	struct ROCKET_DATA {
 		uint8_t start1 = 0xff;
 		uint8_t start2 = 0xff;
+		uint32_t timestamp;
 		float Hts_temperature;
 		float Lps_pressure;
 		float Imu_accelX;
@@ -20,7 +21,7 @@ namespace Rocket {
 		float Imu_magZ;
         float Gps_lat;
         float Gps_lng;
-		uint32_t timestamp;
+        float Gps_altitude;
 		uint8_t end1 = 0xA4;
 		uint8_t end2 = 0x55;
 	};
