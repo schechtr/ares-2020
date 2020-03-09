@@ -1,6 +1,6 @@
 import os
 import csv
-from serialparser import RocketData
+import serialParser
 from datetime import datetime
 
 
@@ -14,7 +14,7 @@ def press2Alt(pressure, temp):
     pressure *= 10 #convert kpa to hpa
     return (pow(seaLevel/pressure, 1/5.257) - 1) * (temp + 273.15) * 1/(0.0065)
 
-def convertPackage(packet : RocketData):
+def convertPackage(packet : serialParser.RocketData):
     '''
     takes in the Rocket dataclass
     returns a list in the order of the class 
@@ -32,7 +32,9 @@ def convertPackage(packet : RocketData):
         Imu_magZ : float = 0
         Gps_lat : float = 0
         Gps_lng : float = 0
-        UNIX time : string %H:%M:%S
+        Gps_altitude : float = 0
+        timestamp : float = 0
+        localtime : string %H:%M:%S
         altitude: float in meters
     ]
     '''
@@ -40,6 +42,7 @@ def convertPackage(packet : RocketData):
     for i in packet.__dict__.items():
         if i[0] == 'start' or i[0] == 'end':
             continue
+
         results.append(i[1])
     
     alt = press2Alt(results[1], results[0])
@@ -48,12 +51,13 @@ def convertPackage(packet : RocketData):
     date = str(datetime.now())
     localtime = date[11:]
     results = [localtime] + results
-    filePath = 'Data_' + date[:10] + '.csv'
+    filePath = './data/Data_' + date[:10] + '.csv'
     header = []
     if not os.path.exists(filePath):
         #write header
         header += [
-            'UNIX time',
+            'local time',
+            'transmission timestamp',
             'Hts_temperature',
             'Lps_pressure',
             'Imu_accelX',
@@ -67,6 +71,7 @@ def convertPackage(packet : RocketData):
             'Imu_magZ',
             'Gps_lat',
             'Gps_lng',
+            'Gps_altitude',
             'altitude'
         ]
     
@@ -75,7 +80,6 @@ def convertPackage(packet : RocketData):
         if len(header) != 0:
             writer.writerow(header)
         writer.writerow(results)
-        
     return results
 
     
