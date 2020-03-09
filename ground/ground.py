@@ -1,6 +1,6 @@
 
 import serial
-import serialparser
+import serialParser
 from portSelect import serial_ports
 
 
@@ -18,8 +18,8 @@ def main():
     print("Connection successful, listening on", port)
     
     # class instances
-    data = serialparser.RocketData()
-    parser = serialparser.SerialParser(data)
+    data = serialParser.RocketData()
+    parser = serialParser.SerialParser(data)
 
     while True:
         stream = receive.read(2400)
