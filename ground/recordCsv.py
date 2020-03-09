@@ -1,5 +1,6 @@
+import os
 import csv
-from serialFunctions import RocketData
+from serialparser import RocketData
 from datetime import datetime
 
 
@@ -44,11 +45,37 @@ def convertPackage(packet : RocketData):
     alt = press2Alt(results[1], results[0])
     alt = float("{0:.2f}".format(alt))
     results.append(alt)
-
-    localtime = str(datetime.now())[11:]
-    results.append(localtime)
+    date = str(datetime.now())
+    localtime = date[11:]
+    results = [localtime] + results
+    filePath = 'Data_' + date[:10] + '.csv'
+    header = []
+    if not os.path.exists(filePath):
+        #write header
+        header += [
+            'UNIX time',
+            'Hts_temperature',
+            'Lps_pressure',
+            'Imu_accelX',
+            'Imu_accelY',
+            'Imu_accelZ',
+            'Imu_gyroX',
+            'Imu_gyroY',
+            'Imu_gyroZ',
+            'Imu_magX',
+            'Imu_magY',
+            'Imu_magZ',
+            'Gps_lat',
+            'Gps_lng',
+            'altitude'
+        ]
     
-
+    with open(filePath, 'a') as recordFile:
+        writer = csv.writer(recordFile)
+        if len(header) != 0:
+            writer.writerow(header)
+        writer.writerow(results)
+        
     return results
 
     
