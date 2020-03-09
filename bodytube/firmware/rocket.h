@@ -5,6 +5,8 @@
 namespace Rocket {
 	#pragma pack(push, 1)
 	struct ROCKET_DATA {
+		uint8_t start1 = 0xff;
+		uint8_t start2 = 0xff;
 		uint16_t Analog_CC;
 		uint16_t Analog_fuel;
 		uint16_t Analog_OX;
@@ -21,6 +23,8 @@ namespace Rocket {
 		float Imu_magY;
 		float Imu_magZ;
 		uint32_t timestamp;
+		uint8_t end1 = 0xA4;
+		uint8_t end2 = 0x55;
 	};
 	#pragma pack(pop)
 	static ROCKET_DATA data;
