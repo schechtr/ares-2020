@@ -5,3 +5,5 @@ verbose/
 config.csv
 rocket_data.csv
 __pycache__/*
+*.pyc
+*.DS_Store
