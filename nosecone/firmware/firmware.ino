@@ -41,10 +41,10 @@ void loop() {
     totalRefreshTime += refreshTime;
     refreshCount++;
 
-    if(refreshCount > 1000) {
+    /*if(refreshCount > 1000) {
         __int32_t avg = totalRefreshTime / refreshCount;
         Serial.println(avg);
-    }
+    }*/
 }
 
 
@@ -63,7 +63,7 @@ void warmup() {
     for(int i = 0; i < Rocket::MODULE_NUM ; i++) {
        
         Serial.print("Warming up: ");
-        //Serial.println(Rocket::MODULE_NAMES[i]);
+        Serial.println(Rocket::MODULE_NAMES[i]);
         if(Rocket::handlers[i]->warmup()) {
             Serial.println(" ...successful");
             
@@ -81,8 +81,8 @@ void refresh() {
         if(!byteFlag(enabledByte, i)) {
             continue;
         }
-        //Serial.print("Refreshing: ");
-        //Serial.println(Rocket::MODULE_NAMES[i]);
+        Serial.print("Refreshing: ");
+        Serial.println(Rocket::MODULE_NAMES[i]);
         Rocket::handlers[i]->refresh();
         
         Rocket::data.timestamp = millis(); //update timestamp
