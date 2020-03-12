@@ -1,8 +1,9 @@
 # ARES-TELEMETRY-2020
 
 ## Firmware Todo List
-* test SD **currently the code is essentially unchanged from last year**
-* confirm that start and end bytes in rocket.h ROCKET_DATA struct are good enough
+* choose a chipselcect pin for the bodytube system
+* benchmark refresh times and optimize if necessary
+* ~~test SD~~ works
 * update bytes_per_refresh in radio.h based on how many bytes per second the radio is configured for
 * timeout for warmups perhaps?
 * ~~convert pressures to altitude~~ **moved to ground station**
@@ -24,9 +25,6 @@ and outputs it to:
 * RFD900 Radio
 
 In 'firmware/', is the actual C++ code that is compiled and deployed to the device
-
-In 'modules/', is the modularized form of the code. Each file ending .module.h is preprocessed with a Kotlin script into
-a corresonding file in 'firmware/'.
 
 ### IMU on the Arduino NANO 33 BLE Sense
 
