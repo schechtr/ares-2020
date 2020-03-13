@@ -1,7 +1,6 @@
 import struct
 from dataclasses import dataclass
 from math import pow 
-import recordCsv
 
 @dataclass
 class RocketData:
@@ -48,7 +47,6 @@ class SerialParser:
                 self.numpackages += 1
 
                 package = 'ffff' + package
-                
 
                 if len(package) != DATA_LEN * 2:
                     self.loss += 1
@@ -56,6 +54,8 @@ class SerialParser:
 
                 unpacked = self.unpackData(bytes.fromhex(package))
                 self.updateData(unpacked)
+                
+        
 
 
     def unpackData(self, package):
@@ -74,6 +74,7 @@ class SerialParser:
         '''
         updates RocketData after newly unpacked data is available
         '''
+        import recordCsv
 
         data = RocketData(*update)
         self.data = data
@@ -84,7 +85,6 @@ class SerialParser:
         self.data_queue.append(data)
         if len(self.data_queue) > 50:
             self.data_queue.pop(0)
-
 
 
 # real data package:
