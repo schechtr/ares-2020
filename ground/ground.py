@@ -1,43 +1,66 @@
 
 import serial
+import queue
+import threading
 import serialParser
 from portSelect import serial_ports
+
+q = queue.Queue()
+# class instances
+data = serialParser.RocketData()
+parser = serialParser.SerialParser(data)
+
+def worker():
+    buf = b''
+    while True:
+
+        if q.empty():
+            continue
+        
+        item = q.get()
+        buf += item
+
+        # call parser here but better
+        if len(buf) > 1024:
+            parser.findPackage(buf)
+            buf = b''
 
 
 def main():
     
+    # select the port to read from
     print('Scanning ports...')    
-    # select the port
     ports = serial_ports()
     print(ports)
 
     indexNum = int(input("Select index: "))
     port = ports[indexNum]
     
-    receive = serial.Serial(port, baudrate=57600, timeout=5)
+    ser = serial.Serial(port, baudrate=57600, timeout=5)
     print("Connection successful, listening on", port)
+
     
-    # class instances
-    data = serialParser.RocketData()
-    parser = serialParser.SerialParser(data)
+    # start parser thread
+    parserThread = threading.Thread(target=worker)
+    parserThread.start()
+
 
     while True:
-        stream = receive.read(2400)
-        
-        parser.findPackage(stream)
+        if ser.in_waiting > 0:
+            read = ser.read(ser.in_waiting)
+            q.put(read)
 
-        if len(parser.data_queue) > 25:
-            break
+    
 
-        
+    # generate reports 
     print("report:")
     print(parser.data_queue)
     print("total packages received: {}".format(parser.numpackages))
     print("total packages lost: {}".format(parser.loss))
     print("percent lost: {}".format(100.0 * parser.loss / parser.numpackages))
 
-    
-    receive.close()
+
+    ser.close()
 
     
 
